@@ -57,6 +57,12 @@
       <version>1.2.6</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>ru.yandex.qatools.htmlelements</groupId>
+      <artifactId>htmlelements-matchers</artifactId>
+      <version>1.20.0</version>
+    </dependency>
+
 
   </dependencies>
 
