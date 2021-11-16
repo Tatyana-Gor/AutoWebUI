@@ -1,5 +1,6 @@
 package com.geekbrains.lesson6;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -18,6 +19,7 @@ public class CrmNavigationBar extends CrmBaseView{
     @FindBy(xpath = "//ul[@class='nav nav-multilevel main-menu']/li")
     public List<WebElement> navBarItems;
 
+    @Step("Открытие выпадающего меню")
     public void openNavBarItem(String itemName){
         Actions actions = new Actions(driver);
         WebElement item = navBarItems.stream().filter(element -> element.getText().equals(itemName)).findFirst().get();

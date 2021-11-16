@@ -4,17 +4,27 @@ import com.geekbrains.lesson6.CrmLoginPage;
 import com.geekbrains.lesson6.CrmMainPage;
 import com.geekbrains.lesson6.CrmNavigationBar;
 import com.geekbrains.lesson6.ProjectSubMenu;
+import com.geekbrains.lesson7.CustomLogger;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import io.qameta.allure.Allure;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
+@Story("CRM Geekbrains")
 public class CrmObjectTest {
-    WebDriver driver;
+    EventFiringWebDriver driver;
     WebDriverWait webDriverWait;
 
     @BeforeAll
@@ -24,12 +34,14 @@ public class CrmObjectTest {
 
     @BeforeEach
     void setupBrowser() {
-        driver = new ChromeDriver();
+        driver = new EventFiringWebDriver(new ChromeDriver());
+        driver.register(new CustomLogger());
         webDriverWait = new WebDriverWait(driver, 5);
         driver.get("https://crm.geekbrains.space/user/login");
     }
 
     @Test
+    @DisplayName("Создание проекта")
     void loginTest() {
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
       new CrmLoginPage(driver)
@@ -40,7 +52,7 @@ public class CrmObjectTest {
       new ProjectSubMenu(driver).projectSubMenuItemClick();
       new CrmProjectPage(driver).clickCreateProject();
       new CrmCreateProjectPage(driver)
-              .fillProjectName("Gorshkova11")
+              .fillProjectName("Gorshkova14")
               .clickSpesifyCompany()
               .clickNameCompany()
               .selectBusinessUnit("Research & Development")
@@ -55,6 +67,15 @@ public class CrmObjectTest {
 
     @AfterEach
     void tearDown(){
+        LogEntries browserLogs = driver.manage().logs().get(LogType.BROWSER);
+        Iterator<LogEntry> iterator = browserLogs.iterator();
+        while (iterator.hasNext()) {
+            Allure.addAttachment("Лог в консоли браузера", iterator.next().getMessage());
+        }
+        for (LogEntry log: browserLogs) {
+            System.out.println(log.getMessage());
+        }
+
         driver.quit();
     }
 }
