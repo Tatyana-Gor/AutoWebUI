@@ -3,7 +3,7 @@ Feature: create expense request
   Background:
   Given I am authorized
 
-  Scenario Outline:
+ Scenario:
     Given Я перехожу с помощью интерфейса на страницу создания проекта
     When Я заполняю название проекта
     And Кликаю на выбор организации
@@ -15,4 +15,4 @@ Feature: create expense request
     And Выбираю менеджера
     And Кликаю на кнопку сохранения
     Then Вижу сообщение после успешного сохранения проекта
-    Examples:
+
